@@ -131,12 +131,11 @@ app.get('/ipAdress', function (req, res) {
       allIpAddress.push(value.value.toString().replace(/,/g, '.'))
     })
     getipAddress.close()
-    //console.log(varbinds[0].value);
+    res.send(allIpAddress)
+    allIpAddress = []
   })
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headres', 'X-Requested-With')
-  res.send(allIpAddress)
-  allIpAddress = []
 })
 
 app.post('/setName', function (req, res) {

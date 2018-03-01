@@ -18,7 +18,7 @@ var inOctet_sw = []
 var outOctet_sw = []
 var data415 = []
 
-///////////////////// INFO 415 //////////////////////////////
+///////////////////// INFO SW //////////////////////////////
 app.get('/infoSW', function (req, res) {
   var getInfoSW = new snmp.Session({ host: '10.4.15.210', community: community })
   var oidget_info = '.1.3.6.1.2.1.1'
@@ -37,7 +37,6 @@ app.get('/infoSW', function (req, res) {
   res.send(infoSW)
   infoSW = []
 })
-
 
 //////////////////////// SW //////////////////////////
 app.get('/ifStatus', function (req, res) {
@@ -101,7 +100,7 @@ app.get('/ifStatus', function (req, res) {
   })
   int_sw.forEach(function (err, index) {
     var set = {
-      name: '415',
+      name: 'Switch',
       int: int_sw[index],
       port: port_sw[index],
       time: time_sw[index],
@@ -122,6 +121,10 @@ app.get('/ifStatus', function (req, res) {
   data415 =[]
 })
 
+app.post('/setName', function (req, res) {
+   let data = req.body.body
+   console.log(data)
+})
 // ////////////////server localhost /////////////////////////
 app.use(express.static('dist'))
 app.listen(7001, function () {

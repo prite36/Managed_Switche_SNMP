@@ -122,9 +122,17 @@ app.get('/ifStatus', function (req, res) {
 })
 
 app.post('/setName', function (req, res) {
-   let data = req.body.body
-   console.log(data)
-})
+   let data = req.body
+   console.log(data.name)
+   var setNameSW = new snmp.Session({ host: '10.4.15.210', community: community })
+   var oidPost = '.1.3.6.1.2.1.1.5.0'
+   setNameSW.set({ oid: oidPost, value: data.name, type: 4 }, function (error, varbind) {
+    if (error) {
+        console.log('Fail :(');
+    } else {
+        console.log('The set is done.');
+    }
+});
 // ////////////////server localhost /////////////////////////
 app.use(express.static('dist'))
 app.listen(7001, function () {

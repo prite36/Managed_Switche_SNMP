@@ -126,19 +126,17 @@ app.get('/ipAdress', function (req, res) {
   var getipAddress = new snmp.Session({ host: '10.4.15.210', community: community })
   var oidget_info = '.1.3.6.1.2.1.4.22.1.3'
   getipAddress.getSubtree({ oid: oidget_info }, function (err, varbinds) {
-    // allIpAddress.push({
-    //       discription: varbinds[0].value,
-    //       uptime: timecheck(varbinds[2].value),
-    //       name: varbinds[4].value
-    // })
-    console.log(varbinds)
+
+    varbinds.forEach( value => {
+      allIpAddress.push(value.value.toString().replace(/,/g, '.'))
+    })
     getipAddress.close()
     //console.log(varbinds[0].value);
   })
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headres', 'X-Requested-With')
-  // res.send(infoSW)
-  // infoSW = []
+  res.send(allIpAddress)
+  allIpAddress = []
 })
 
 app.post('/setName', function (req, res) {

@@ -16,7 +16,8 @@ var port_sw = []
 var time_sw = []
 var inOctet_sw = []
 var outOctet_sw = []
-var data415 = []
+var dataSW = []
+var allIpAddress = []
 
 ///////////////////// INFO SW //////////////////////////////
 app.get('/infoSW', function (req, res) {
@@ -108,7 +109,7 @@ app.get('/ifStatus', function (req, res) {
       outOctet: outOctet_sw[index]
     }
 
-    data415.push(set)
+    dataSW.push(set)
   })
   int_sw= []
   port_sw =[]
@@ -117,22 +118,42 @@ app.get('/ifStatus', function (req, res) {
   outOctet_sw= []
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headres', 'X-Requested-With')
-  res.send(data415)
-  data415 =[]
+  res.send(dataSW)
+  dataSW =[]
+})
+
+app.get('/ipAdress', function (req, res) {
+  var getipAddress = new snmp.Session({ host: '10.4.15.210', community: community })
+  var oidget_info = '.1.3.6.1.2.1.4.22.1.3'
+  getipAddress.getSubtree({ oid: oidget_info }, function (err, varbinds) {
+    // allIpAddress.push({
+    //       discription: varbinds[0].value,
+    //       uptime: timecheck(varbinds[2].value),
+    //       name: varbinds[4].value
+    // })
+    console.log(varbinds)
+    getipAddress.close()
+    //console.log(varbinds[0].value);
+  })
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headres', 'X-Requested-With')
+  // res.send(infoSW)
+  // infoSW = []
 })
 
 app.post('/setName', function (req, res) {
    let data = req.body
-   console.log(data.name)
+   console.log(data.nameSW)
    var setNameSW = new snmp.Session({ host: '10.4.15.210', community: community })
    var oidPost = '.1.3.6.1.2.1.1.5.0'
    setNameSW.set({ oid: oidPost, value: data.name, type: 4 }, function (error, varbind) {
     if (error) {
-        console.log('Fail :(');
+        console.log('Fail ');
     } else {
         console.log('The set is done.');
     }
-});
+  })
+})
 // ////////////////server localhost /////////////////////////
 app.use(express.static('dist'))
 app.listen(7001, function () {

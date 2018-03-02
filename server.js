@@ -149,6 +149,7 @@ app.post('/setName', function (req, res) {
         console.log('Fail ');
     } else {
         console.log('The set is done.');
+        setNameSW.close()
     }
   })
 })
@@ -158,12 +159,15 @@ app.post('/setStatusports', function (req, res) {
    console.log(data.port)
    console.log(data.status)
    var setPortSW = new snmp.Session({ host: '10.4.15.210', community: community })
-   var oidPost = '.1.3.6.1.2.1.2.2.1.7' + data.port
-   setPortSW.set({ oid: oidPost, value: data.status, type: 1 }, function (error, varbind) {
+   var oidPost = '.1.3.6.1.2.1.2.2.1.7.' + data.port
+   console.log(oidPost)
+   var val = data.status * 1
+   setPortSW.set({ oid: oidPost, value: val, type: 2 }, function (error, varbind) {
     if (error) {
         console.log('Fail ');
     } else {
         console.log('The set port is done.');
+        setPortSW.close()
     }
   })
 })

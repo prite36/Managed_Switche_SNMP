@@ -1,15 +1,44 @@
 <template>
   <div class="getinfo">
-    Name Switch {{infoSW[0].name}}<br>
-    description {{infoSW[0].description}}<br>
-    uptime {{infoSW[0].uptime}}<br>
+    <center>
+    <table>
+      <tr>
+        <td>
+          <b>Name Switch</b>
+        </td>
+        <td>
+          {{infoSW[0].name}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>description</b>
+        </td>
+        <td>
+           {{infoSW[0].description}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+        <b>uptime</b>
+        </td>
+        <td>
+          {{infoSW[0].uptime}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+        <b>IP Connected</b>
+        </td>
+        <td>
+          {{ip}}
+        </td>
+      </tr>
+    </table>
+  </center>
+    <br>
     <center>
       <b-table :data="ifStatus" :columns="columns"></b-table>
-      <table border="1">
-        <tr v-for="(n, index) in ip" :key="index">
-          <td>{{n}}</td>
-        </tr>
-      </table>
     </center>
   </div>
 </template>
@@ -43,12 +72,6 @@ export default {
         {
           field: 'time',
           label: 'Time'
-        }
-      ],
-      columns2: [
-        {
-          field: 'ip',
-          label: 'ip with connected'
         }
       ]
     }

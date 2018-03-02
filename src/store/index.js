@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
       state.infoSW = infoSW
     },
     STATUS (state, ifStatus) {
+      state.ifStatus = ''
       state.ifStatus = ifStatus
     }
   },

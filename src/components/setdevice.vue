@@ -1,64 +1,76 @@
 <template>
   <div class="setdevice">
-    <input type="text" name="" value="" v-model="name">
-    <input type="button" name="" value="name" @click="setNameSw()">
-    <input type="button" name="" value="port" @click="setPortsSw()">
+    <section>
+      <b-field label="Set Name Switch" width="100px;">
+          <b-input v-model="name"></b-input>
+      </b-field>
+    </section>
+    <br><br>
+    <button class="button is-primary is-medium"
+        @click="setNameSw()">
+        Set name SW
+    </button>
+    <br>
+    <div class="button"
+    v-for="(port, index) in ifStatus"
+    :key="index"
+    @click="setPortsSw(port.port, index)">
+      <button
+      class="button is-primary is-medium">
+          {{port.int}}
+          Now is {{port.port}}
+      </button>
+      <br>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'setdevice',
   data () {
     return {
       name: ''
-      // port: '',
-      // status: 1
     }
   },
+  computed: {
+    ...mapGetters(['ifStatus'])
+  },
   methods: {
+    ...mapActions(['updateStatus']),
     setNameSw () {
       axios.post('http://localhost:7001/setName', {
         nameSW: this.name
       })
-      // .then(function (response) {
-      //   console.log(response)
-      // })
-      // .catch(function (error) {
-      //   console.log(error)
-      // })
     },
-    setPortsSw () {
+    setPortsSw (status, index) {
+      console.log(status)
+      let ind = (index + 1) + ''
+      console.log(ind)
+      let set = ''
+      if (status === 'up') {
+        set = '2'
+      } else if (status === 'down') {
+        set = '1'
+      }
       axios.post('http://localhost:7001/setStatusports', {
-        'port': '11',
-        'status': '2'
+        'port': ind,
+        'status': set
       })
-      // .then(function (response) {
-      //   console.log(response)
-      // })
-      // .catch(function (error) {
-      //   console.log(error)
-      // })
     }
+  },
+  created () {
+    this.updateStatus()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/* h1, h2 {
-  font-weight: normal;
+.button {
+  padding-left: 1%;
+  padding-top: 1%;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-} */
 </style>

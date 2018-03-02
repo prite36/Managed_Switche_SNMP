@@ -1,33 +1,68 @@
 <template>
   <div class="getinfo">
-    get
+    Name Switch {{infoSW[0].name}}<br>
+    description {{infoSW[0].description}}<br>
+    uptime {{infoSW[0].uptime}}<br>
+    <center>
+      <b-table :data="ifStatus" :columns="columns"></b-table>
+      <table border="1">
+        <tr v-for="(n, index) in ip" :key="index">
+          <td>{{n}}</td>
+        </tr>
+      </table>
+    </center>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'getinfo',
   data () {
     return {
-      infoSW: '',
-      ifStatus: '',
-      ip: ''
+      columns: [
+        {
+          field: 'int',
+          label: 'interface'
+        },
+        {
+          field: 'inOctet',
+          label: 'inOctet',
+          width: '40'
+        },
+        {
+          field: 'outOctet',
+          label: 'Outoctet'
+        },
+        {
+          field: 'port',
+          label: 'Port Status',
+          centered: true,
+          width: '40'
+        },
+        {
+          field: 'time',
+          label: 'Time'
+        }
+      ],
+      columns2: [
+        {
+          field: 'ip',
+          label: 'ip with connected'
+        }
+      ]
     }
   },
-  mounted () {
-    var vm = this
-    setInterval(function () {
-      axios.get('http://localhost:7001/infoSW').then((response) => {
-        vm.infoSW = response.data
-      })
-      axios.get('http://localhost:7001/ifStatus').then((response) => {
-        vm.ifStatus = response.data
-      })
-      axios.get('http://localhost:7001/ipAdress').then((response) => {
-        vm.ip = response.data
-      })
-    }, 10000)
+  computed: {
+    ...mapGetters(['ip', 'infoSW', 'ifStatus'])
+  },
+  methods: {
+    ...mapActions(['updateip', 'updateInfo', 'updateStatus'])
+  },
+  created () {
+    this.updateip()
+    this.updateInfo()
+    this.updateStatus()
   }
 }
 </script>
